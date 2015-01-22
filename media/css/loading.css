@@ -1,0 +1,14 @@
+#loading_ajax
+{
+	
+	background: url('../images/loading.gif') no-repeat 50% 50%;
+	width:54px;
+	height:55px;
+	position:absolute;
+	top:45%;
+	left:45%;
+	background-color:#000;
+	border-radius:10px;
+	border: solid #ccc;
+	z-index:102;
+}

@@ -1,21 +1,22 @@
 <?php
 
-use GuzzleHttp\Client;
-
 function ServersAdmin()
 {
 	load_model('wpanel2');
 
 	load_libraries(array('admin/generate_admin_class', 'utilities/menu_selected'));
-	load_libraries(array('autoload'), PhangoVar::$base_path.'modules/wpanel2/vendor/');
-	load_libraries(array('get_server_url'), PhangoVar::$base_path.'modules/wpanel2/libraries/');
+	load_libraries(array('utilities'), PhangoVar::$base_path.'modules/wpanel2/libraries/');
 
 	load_lang('wpanel2');
 	
 	/*$client = new Client();
 	$response = $client->get('http://www.web-t-sys.com');*/
+	settype($_GET['server_type'], 'integer');
+	settype($_GET['id'], 'integer');
 	
-	$arr_menu[0]=array('Home', set_admin_link('servers', array()));
+	$arr_menu[0]=array(PhangoVar::$lang['wpanel2']['servers_type'], set_admin_link('servers', array()));
+	$arr_menu[1]=array(PhangoVar::$lang['wpanel2']['servers_list'], set_admin_link('servers', array('op' => 1, 'server_type' => $_GET['server_type'])));
+	$arr_menu[2]=array(PhangoVar::$lang['wpanel2']['configure_server'], set_admin_link('servers', array('op' => 2, 'server_type' => $_GET['server_type'], 'id' => $_GET['id'])));
 	
 	settype($_GET['op'], 'integer');
 	
@@ -45,9 +46,6 @@ function ServersAdmin()
 	
 		case 1:
 		
-			settype($_GET['server_type'], 'integer');
-		
-			$arr_menu[1]=array(PhangoVar::$lang['wpanel2']['servers_list'], set_admin_link('servers', array('op' => 1, 'server_type' => $_GET['server_type'])));
 		
 			echo menu_barr_hierarchy($arr_menu, 'op', $yes_last_link=0, $arr_final_menu=array(), $return_arr_menu=0);
 		
@@ -89,13 +87,13 @@ function ServersAdmin()
 			
 			$arr_server=PhangoVar::$model['wserver']->select_a_row($_GET['id']);
 			
+			//$arr_server['server_type']=PhangoVar::$model['wserver']->components['server_type']->show_formatted();
+			
 			settype($arr_server['id'], 'integer');
 			
 			if($arr_server['id']>0)
 			{
 			
-				$arr_menu[1]=array(PhangoVar::$lang['wpanel2']['servers_list'], set_admin_link('servers', array('op' => 1, 'server_type' => $_GET['server_type'])));
-				$arr_menu[2]=array(PhangoVar::$lang['wpanel2']['configure_server'], set_admin_link('servers', array('op' => 2, 'server_type' => $_GET['server_type'])));
 				
 				echo menu_barr_hierarchy($arr_menu, 'op', $yes_last_link=0, $arr_final_menu=array(), $return_arr_menu=0);
 				
@@ -106,9 +104,19 @@ function ServersAdmin()
 					//make_direct_url($base_url, $module, $controller_folders, $parameters_func=array(), $extra_parameters=array())
 					//Obtain info from server
 					
-					$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('id' => AdminSwitchClass::$login->session['IdUser_admin'], 'token' => AdminSwitchClass::$login->session['token_client']));
+					//$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('id' => AdminSwitchClass::$login->session['IdUser_admin'], 'token' => AdminSwitchClass::$login->session['token_client']));
 					
-					$client = new Client();
+					$ajax_url=make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/info', array('action' => 'obtain_info_from_server', 'server_id' => $arr_server['id'], 'token' => AdminSwitchClass::$login->session['token_client']));
+					
+					PhangoVar::$arr_cache_header[]=load_view(array($ajax_url, 'load_info', 'load_error_info'), 'wpanel2/ajaxpanel', 'wpanel2');
+					
+					echo load_view(array(), 'wpanel2/showinfo', 'wpanel2');
+					
+					/**
+					* Here load the view for fill the result.
+					*/
+					
+					/*$client = new Client();
 					
 					try {
 					
@@ -127,7 +135,7 @@ function ServersAdmin()
 					
 						echo $e->getMessage();
 					
-					}
+					}*/
 					 
 				
 				}

@@ -1,6 +1,7 @@
 <?php
 
-load_libraries(array('i18n_fields'));
+load_libraries(array('i18n_fields', 'login'));
+load_model('admin');
 
 /**
 * Server type
@@ -40,6 +41,9 @@ PhangoVar::$model['wserver']->set_component('server_type', 'ForeignKeyField', ar
 
 PhangoVar::$model['wserver']->set_component('configured', 'BooleanField', array());
 
+PhangoVar::$model['wserver']->components['server_type']->name_field_to_field='codename';
+PhangoVar::$model['wserver']->components['server_type']->fields_related_model=array('id', 'name');
+
 /**
 * Scripts used for configure the server.
 */
@@ -73,8 +77,16 @@ class ConfigWpanel {
 	*/
 	
 	static public $verify_guzzle_ssl=false;
+	
+	static public $login;
 
 }
+
+/**
+* A copy of $login admin for check_login out of the admin site.
+*/
+
+ConfigWpanel::$login=new LoginClass('user_admin', 'username', 'password', 'token_client', $arr_user_session=array('IdUser_admin', 'privileges_user', 'username', 'token_client'), $arr_user_insert=array('username', 'password', 'repeat_password', 'email'));
 
 
 ?>
