@@ -106,7 +106,7 @@ function ServersAdmin()
 					//make_direct_url($base_url, $module, $controller_folders, $parameters_func=array(), $extra_parameters=array())
 					//Obtain info from server
 					
-					$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('token' => 'pepe'));
+					$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('id' => AdminSwitchClass::$login->session['IdUser_admin'], 'token' => AdminSwitchClass::$login->session['token_client']));
 					
 					$client = new Client();
 					
