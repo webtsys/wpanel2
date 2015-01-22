@@ -54,5 +54,27 @@ PhangoVar::$model['wpanel_script']->set_component('name', 'ForeignKeyField', arr
 
 PhangoVar::$model['wpanel_script']->set_component('script_name', 'CharField', array(255));
 
+class ConfigWpanel {
+
+	//Always hardcoded https.
+
+	static public $server_port=443;
+	
+	/**
+	* Examples from Guzzle
+	// Use the system's CA bundle (this is the default setting)
+	$client->get('/', ['verify' => true]);
+
+	// Use a custom SSL certificate on disk.
+	$client->get('/', ['verify' => '/path/to/cert.pem']);
+
+	// Disable validation entirely (don't do this!).
+	$client->get('/', ['verify' => false]);
+	*/
+	
+	static public $verify_guzzle_ssl=false;
+
+}
+
 
 ?>

@@ -4,12 +4,13 @@ use GuzzleHttp\Client;
 
 function ServersAdmin()
 {
+	load_model('wpanel2');
 
 	load_libraries(array('admin/generate_admin_class', 'utilities/menu_selected'));
 	load_libraries(array('autoload'), PhangoVar::$base_path.'modules/wpanel2/vendor/');
+	load_libraries(array('get_server_url'), PhangoVar::$base_path.'modules/wpanel2/libraries/');
 
 	load_lang('wpanel2');
-	load_model('wpanel2');
 	
 	/*$client = new Client();
 	$response = $client->get('http://www.web-t-sys.com');*/
@@ -35,6 +36,8 @@ function ServersAdmin()
 			$admin->arr_fields_no_showed=array('default');
 			
 			$admin->options_func='TypeOptionsListModel';
+			
+			$admin->set_url_post(set_admin_link('servers', array('op' => 0, 'server_type' => 0)));
 			
 			$admin->show();
 		
@@ -100,8 +103,32 @@ function ServersAdmin()
 				
 				if($arr_server['configured']==0)
 				{
-				
+					//make_direct_url($base_url, $module, $controller_folders, $parameters_func=array(), $extra_parameters=array())
 					//Obtain info from server
+					
+					$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('token' => 'pepe'));
+					
+					$client = new Client();
+					
+					try {
+					
+						$response = $client->get($url_info_server, [ 'verify' => ConfigWpanel::$verify_guzzle_ssl ]  );
+						
+						$json = $response->json();
+						
+						if($json['login']==0)
+						{
+						
+							echo $json['txt_error'];
+						
+						}
+						
+					} catch (exception $e) {
+					
+						echo $e->getMessage();
+					
+					}
+					 
 				
 				}
 				else
