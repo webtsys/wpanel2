@@ -14,7 +14,7 @@ class InfoSwitchClass extends ControllerSwitchClass {
 
 			$arr_server=PhangoVar::$model['wserver']->select_a_row($server_id);
 			
-			$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('action' => 'os', 'token' => 'token'));
+			$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('action' => 'os', 'token' => ConfigWpanel::$login->obtain_cookie_token()));
 			
 			echo server_restful_connect($url_info_server);
 			
@@ -24,7 +24,7 @@ class InfoSwitchClass extends ControllerSwitchClass {
 		else
 		{
 		
-			echo json_encode(array('txt_error' => 'Error: no login in system'));
+			echo json_encode(array('login' => 0, 'txt_error' => 'Error: no login in system'));
 		
 		}
 	
