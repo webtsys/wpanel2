@@ -11,19 +11,28 @@ ob_start();
 	
 		function load_info(data)
 		{
-		
-			//alert(JSON.stringify(data));
 			
 			if(data.login==0)
 			{
 				
-				$('#error_login').html(data.txt_error);
+				$('#error_login').html(data.error_txt);
 			
 			}
 			else
 			{
-			
 				
+				if(data.code_error!=0)
+				{
+					
+					$('#error_login').html(data.error_txt);
+				
+				}
+				else
+				{
+					alert(JSON.stringify(data))
+					//$('#error_login').html(data.error_txt);
+				
+				}
 			
 			}
 		
@@ -32,7 +41,7 @@ ob_start();
 		function load_error_info(data)
 		{
 			
-			$('#error_login').html(data.txt_error);
+			$('#error_login').html(data.error_txt);
 		
 		}
 	
