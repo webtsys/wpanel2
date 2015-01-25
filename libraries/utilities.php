@@ -27,8 +27,8 @@ function server_restful_connect($url_server)
 		return json_encode($json);
 		
 	} catch (exception $e) {
-
-		return json_encode(array('txt_error' => $e->getMessage().'<p>'.$response->getBody() ));
+		//.'<p>'.$response->getBody()
+		return json_encode(array('error_txt' => $e->getMessage() , 'code_error' => 1));
 
 	}
 	

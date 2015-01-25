@@ -29,8 +29,8 @@ ob_start();
 				}
 				else
 				{
-					alert(JSON.stringify(data))
-					//$('#error_login').html(data.error_txt);
+					//alert(JSON.stringify(data))
+					$('#error_login').html(data.error_txt);
 				
 				}
 			
