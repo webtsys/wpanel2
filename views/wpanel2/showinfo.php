@@ -3,6 +3,8 @@
 function ShowInfoView()
 {
 
+PhangoVar::$arr_cache_jscript['wpanel2'][]='mustache.js';
+
 ob_start();
 					
 ?>
@@ -24,6 +26,13 @@ ob_start();
 				if(data.error!=0)
 				{
 					
+					if(data.error_txt==null)
+					{
+					
+						data.error_txt='Unknown error';
+					
+					}
+					
 					$('#error_login').html(data.error_txt);
 				
 				}
@@ -39,6 +48,32 @@ ob_start();
 					$('#distro').html(data.system_info.distribution[0]);
 					$('#version').html(data.system_info.distribution[1]);
 					$('#arch').html(data.system_info.machine);
+					
+					
+					var template = $('#template').html();
+					
+					Mustache.parse(template);
+					
+					data.system_info['module_installed']=function () {
+					
+						if(this.installed==0)
+						{
+						
+							return 'Instalar módulo';
+						
+						}
+						else
+						{
+						
+							return 'Desinstalar módulo';
+						
+						}
+					
+					};
+					
+					var rendered = Mustache.render(template, data.system_info);
+					
+					$('#target').html(rendered);
 				
 				}
 			
@@ -80,6 +115,31 @@ $cont_index=ob_get_contents();
 ob_end_clean();
 
 echo load_view(array('Información del servidor', $cont_index), 'content');
+
+?>
+<div id="target">
+</div>
+<script id="template" type="x-tmpl-mustache">
+{{#available_modules}}
+<div class="content">
+	<div class="title">
+		{{name}}
+	</div>
+	<div class="cont">
+		<div id="info_module">
+			<p><label for="package">Paquete</label>: <span class="package">{{package}}</span></p>
+			<p><label for="package">Nombre</label>: <span class="package">{{name}}</span></p>
+			<p><label for="description">Descripción</label>: <span class="description">{{description}}</span></p>
+			<p><input type="submit" value="{{module_installed}}" /></p>
+		</div>
+	</div>
+</div>
+{{/available_modules}}
+</script>
+<?php
+
+
+
 
 }
 
