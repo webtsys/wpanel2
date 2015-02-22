@@ -45,6 +45,17 @@ PhangoVar::$model['wserver']->components['server_type']->name_field_to_field='co
 PhangoVar::$model['wserver']->components['server_type']->fields_related_model=array('id', 'name');
 
 /**
+* Model with modules installed
+*
+*/
+
+PhangoVar::$model['wserver_module']=new Webmodel('wserver_module');
+
+PhangoVar::$model['wserver_module']->set_component('os', 'CharField', array(255));
+PhangoVar::$model['wserver_module']->set_component('type_server', 'CharField', array(255));
+PhangoVar::$model['wserver_module']->set_component('module', 'CharField', array(255));
+
+/**
 * Scripts used for configure the server.
 */
 

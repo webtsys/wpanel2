@@ -105,12 +105,9 @@ function ServersAdmin()
 					//Obtain info from server
 					
 					//$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('id' => AdminSwitchClass::$login->session['IdUser_admin'], 'token' => AdminSwitchClass::$login->session['token_client']));
-					
-					$ajax_url=make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/info', array('action' => 'obtain_info_from_server', 'server_id' => $arr_server['id'], 'token' => AdminSwitchClass::$login->session['token_client']));
-					
-					PhangoVar::$arr_cache_header[]=load_view(array($ajax_url, 'load_info', 'load_error_info'), 'wpanel2/ajaxpanel', 'wpanel2');
-					
-					echo load_view(array(), 'wpanel2/showinfo', 'wpanel2');
+					//You can install the module for control this install with git?, inside of controllers/os/debian/7/webserver/apache/
+			
+					echo load_view(array($arr_server), 'wpanel2/showinfo', 'wpanel2');
 					
 					/**
 					* Here load the view for fill the result.
