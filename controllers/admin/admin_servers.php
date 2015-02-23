@@ -107,6 +107,10 @@ function ServersAdmin()
 					//$url_info_server=make_direct_url(get_server_url($arr_server['host']), 'wserver2', 'showinfo', array('id' => AdminSwitchClass::$login->session['IdUser_admin'], 'token' => AdminSwitchClass::$login->session['token_client']));
 					//You can install the module for control this install with git?, inside of controllers/os/debian/7/webserver/apache/
 			
+					PhangoVar::$model['wserver']->components['server_type']->name_field_to_field='codename';
+			
+					$arr_server=PhangoVar::$model['wserver']->select_a_row($arr_server['id']);
+			
 					echo load_view(array($arr_server), 'wpanel2/showinfo', 'wpanel2');
 					
 					/**

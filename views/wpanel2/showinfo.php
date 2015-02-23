@@ -103,7 +103,31 @@ ob_start();
 		
 			$('body').on('click', '.package_install', function () {
 			
+				package=$(this).attr('id').replace('_install', '');
 				
+				data={};
+			
+				$.get( "<?php echo make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/restapi', array('action' => 'index', 'controller' => 'setserver', 'action_rest' => 'index', 'server_type' => $arr_server['server_type'], 'server_id' => $arr_server['id'])); ?>/server_to_create/"+package, data, function(data) {
+				
+					if(data.error==0)
+					{
+					
+						alert(JSON.stringify(data));
+						
+					}
+					else
+					{
+						
+						
+						$('#'+package+'_error').html(data.error_txt);
+					
+					}
+					
+				}, 'json').fail( function (data) {
+				
+					$('#'+package+'_error').html('Cannot connect to ajax');
+				
+				});
 				
 				return false;
 			
@@ -119,7 +143,9 @@ PhangoVar::$arr_cache_header[]=ob_get_contents();
 
 ob_end_clean();
 
-$ajax_url=make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/info', array('action' => 'obtain_info_from_server', 'server_id' => $arr_server['id'], 'token' => AdminSwitchClass::$login->session['token_client']));
+//$ajax_url=make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/info', array('action' => 'obtain_info_from_server', 'server_id' => $arr_server['id'], 'token' => AdminSwitchClass::$login->session['token_client']));
+
+$ajax_url=make_direct_url(PhangoVar::$base_url, 'wpanel2', 'ajax/restapi', array('action' => 'index', 'controller' => 'showinfo', 'action_rest' => 'os', 'server_id' => $arr_server['id'], 'server_type' => $arr_server['server_type']));
 					
 PhangoVar::$arr_cache_header[]=load_view(array($ajax_url, 'load_info', 'load_error_info'), 'wpanel2/ajaxpanel', 'wpanel2');
 
@@ -165,6 +191,7 @@ echo load_view(array(PhangoVar::$lang['wpanel2']['server_info'], $cont_index), '
 			<input type="hidden" name="distro" value="{{distro}}">
 			<input type="hidden" name="version_distro" value="{{version_distro}}">-->
 			<p><input type="button" class="package_install" value="{{module_installed}}" id="{{package}}_install"/></p>
+			<br /><span class="error" id="{{package}}_error"></span>
 		</div>
 	</div>
 </div>
